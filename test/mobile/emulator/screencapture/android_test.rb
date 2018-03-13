@@ -9,9 +9,8 @@ class Mobile::Emulator::Screencapture::AndroidTest < Minitest::Test
   end
 
   def test_screenshot
-    @android.expects(:_native_screenshot)
-    @android.expects(:_pull_screenshot)
+    @android.stubs(:_adb)
 
-    @android.screenshot("test_image")
+    assert_equal @android.screenshot("test_image"), "#{@android.screenshot_dir}/test_image.png"
   end
 end

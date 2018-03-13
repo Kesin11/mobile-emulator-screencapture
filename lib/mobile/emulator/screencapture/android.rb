@@ -24,13 +24,17 @@ module Mobile
           screenshot_path
         end
 
+        def _adb(command)
+          `adb #{command}`
+        end
+
         def _native_screenshot
-          `adb shell screencap #{DEVICE_SCREENSHOT_PATH}`
+          _adb("shell screencap #{DEVICE_SCREENSHOT_PATH}")
         end
 
         def _pull_screenshot(screenshot_path)
-          `adb pull #{DEVICE_SCREENSHOT_PATH} #{screenshot_path}`
-          `adb shell rm #{DEVICE_SCREENSHOT_PATH}`
+          _adb("pull #{DEVICE_SCREENSHOT_PATH} #{screenshot_path}")
+          _adb("adb shell rm #{DEVICE_SCREENSHOT_PATH}")
         end
 
         def start_screenrecord(video_name)
