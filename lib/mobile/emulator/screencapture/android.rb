@@ -14,6 +14,8 @@ module Mobile
           @height = args[:height]
           @bit_rate = args[:bit_rate]
           @time_limit = args[:time_limit]
+
+          @screenrecord_path = nil
         end
 
         def screenshot(image_name)
@@ -38,23 +40,48 @@ module Mobile
         end
 
         def start_screenrecord(video_name)
-          screenrecord_path = File.join(@screenrecord_pid, "#{video_name}.mp4")
-          screenrecord_path
+          raise "Screenrecord process already started. pid: #{@screenrecord_pid}" if @screenrecord_pid
 
-          # handling pid
+          @screenrecord_path = File.join(@screenrecord_pid, "#{video_name}.mp4")
+          @screenrecord_pid = _native_start_screenrecord
+
+          @screenrecord_path
         end
 
+          # TODO: add screen record option
         def _native_start_screenrecord
+          pid = spwan("adb shell screenrecord #{DEVICE_SCREENRECORD_PATH}", out: '/dev/null')
+          Process.detach(pid)
+          pid
         end
 
         def stop_screenrecord
-          # handling pid
+          raise 'Any screenrecord process did not started' unless @screenrecord_pid
+          screenrecord_path = @screenrecord_path
+
+          _native_stop_screenrecord
+          _pull_screenrecord(screenrecord_path)
+
+          @screenrecord_pid = nil
+          @screenrecord_path = nil
+
+          screenrecord_path
         end
 
         def _native_stop_screenrecord
+          killed_process_num = Process.kill('SIGINT', @screenrecord_pid)
+          raise "Kill pid: #{@screenrecord_pid} did not end correctly." unless killed_process_num.positive?
+
+          # For ignore error when process already terminated.
+          begin
+            Process.waitpid(@pid)
+          rescue Errno::ECHILD
+          end
         end
 
-        def pull_screenrecord
+        def _pull_screenrecord(screenrecord_path)
+          _adb("pull #{DEVICE_SCREENRECORD_PATH} #{screenrecord_path}")
+          _adb("shell rm #{DEVICE_SCREENRECORD_PATH}")
         end
       end
     end
