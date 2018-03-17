@@ -27,7 +27,6 @@ class Mobile::Emulator::Screencapture::AndroidTest < Minitest::Test
   def test_start_screenrecord_with_options
     android = Mobile::Emulator::Screencapture.create(
       platform: "android",
-      screenshot_dir: "./screenshot",
       screenrecord_dir: "./screenrecord",
       width: 1280,
       height: 800,
@@ -35,13 +34,27 @@ class Mobile::Emulator::Screencapture::AndroidTest < Minitest::Test
       time_limit: 180,
     )
 
-    command = ["shell screencap #{android.class::DEVICE_SCREENRECORD_PATH}"]
+    command = ["shell screenrecord #{android.class::DEVICE_SCREENRECORD_PATH}"]
     command << "--size #{android.width}x#{android.height}"
     command << "--bit-rate #{android.bit_rate}"
     command << "--time-limit #{android.time_limit}"
     expect = command.join(" ")
 
-    android.expects(:_adb).with(equals(expect))
+    android.expects(:_adb_spawn).with(equals(expect))
+
+    android.start_screenrecord("test")
+  end
+
+  def test_start_screenrecord_with_no_options
+    android = Mobile::Emulator::Screencapture.create(
+      platform: "android",
+      screenrecord_dir: "./screenrecord",
+    )
+
+    command = ["shell screenrecord #{android.class::DEVICE_SCREENRECORD_PATH}"]
+    expect = command.join(" ")
+
+    android.expects(:_adb_spawn).with(equals(expect))
 
     android.start_screenrecord("test")
   end

@@ -32,6 +32,12 @@ module Mobile
           `adb #{command}`
         end
 
+        def _adb_spawn(command)
+          pid = spawn("adb #{command}", out: '/dev/null')
+          Process.detach(pid)
+          pid
+        end
+
         def _native_screenshot
           _adb("shell screencap #{DEVICE_SCREENSHOT_PATH}")
         end
@@ -51,11 +57,12 @@ module Mobile
           @screenrecord_path
         end
 
-          # TODO: add screen record option
         def _native_start_screenrecord
-          pid = spawn("adb shell screenrecord #{DEVICE_SCREENRECORD_PATH}", out: '/dev/null')
-          Process.detach(pid)
-          pid
+          command = ["shell screenrecord #{DEVICE_SCREENRECORD_PATH}"]
+          command << "--size #{@width}x#{@height}" if @width && @height
+          command << "--bit-rate #{@bit_rate}" if @bit_rate
+          command << "--time-limit #{@time_limit}" if @time_limit
+          _adb_spawn(command.join(' '))
         end
 
         def stop_screenrecord
