@@ -10,4 +10,9 @@ end
 
 RuboCop::RakeTask.new
 
-task default: :test
+task :lint_test do
+  Rake::Task['rubocop'].invoke
+  Rake::Task['test'].invoke
+end
+
+task default: :lint_test
