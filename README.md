@@ -1,34 +1,55 @@
 # Mobile::Emulator::Screencapture
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mobile/emulator/screencapture`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ruby wrapper for take screenshot and screenrecord on ios/android emulators.
 
-TODO: Delete this and the text above, and describe your gem
+## How to work
+### Android
+Using `adb screencap` and `adb screenrecord`  
+see: https://developer.android.com/studio/command-line/adb.html
+
+`adb screenrcord` is only supported: Android >= 4.4（API Level 19）
+
+### iOS
+**Not supported yet**
+
+Using `xcrun simctl io screenshot` and `xcrun simctl io recordVideo`
+
+see: `xcrun simctl io --help`
+
+`xcrun simctl io screenshot` is only supported: Xcode >= 8.2
 
 ## Installation
-
-Add this line to your application's Gemfile:
 
 ```ruby
 gem 'mobile-emulator-screencapture'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install mobile-emulator-screencapture
-
 ## Usage
+### Android
 
-TODO: Write usage instructions here
+```ruby
+require 'mobile/emulator/screencapture'
 
-## Development
+android = Mobile::Emulator::Screencapture.create(
+  platform: "android",
+  screenshot_dir: "./screenshot",
+  screenrecord_dir: "./screenrecord",
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+  # options for adb screenrecord
+  width: 720,
+  height: 360
+  bit_rate: 6_000_000,
+  time_limit: 180
+)
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+android.screenshot("test")
+# > ./screenshot/test.png
+
+android.start_screenrecord("test")
+sleep 30
+android.stop_screenrecord
+# > ./screenrecord/test.mp4
+```
 
 ## Contributing
 
