@@ -1,4 +1,6 @@
 # Mobile::Emulator::Screencapture
+[![Gem Version](https://badge.fury.io/rb/mobile-emulator-screencapture.svg)](https://badge.fury.io/rb/mobile-emulator-screencapture)
+[![Build Status](https://travis-ci.org/Kesin11/mobile-emulator-screencapture.svg?branch=master)](https://travis-ci.org/Kesin11/mobile-emulator-screencapture)
 
 Ruby wrapper for take screenshot and screenrecord on ios/android emulators.
 

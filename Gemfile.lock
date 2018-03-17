@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mobile-emulator-screencapture (0.1.0)
+    mobile-emulator-screencapture (0.1.1)
 
 GEM
   remote: https://rubygems.org/
