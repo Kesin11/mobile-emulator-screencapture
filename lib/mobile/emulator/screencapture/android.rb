@@ -44,7 +44,7 @@ module Mobile
 
         def _pull_screenshot(screenshot_path)
           _adb("pull #{DEVICE_SCREENSHOT_PATH} #{screenshot_path}")
-          _adb("adb shell rm #{DEVICE_SCREENSHOT_PATH}")
+          _adb("shell rm #{DEVICE_SCREENSHOT_PATH}")
         end
 
         def start_screenrecord(video_name)
