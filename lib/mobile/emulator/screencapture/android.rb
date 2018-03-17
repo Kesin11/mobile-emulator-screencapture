@@ -4,8 +4,8 @@ module Mobile
   module Emulator
     module Screencapture
       class Android < Base
-        DEVICE_SCREENSHOT_PATH = '/sdcard/screenshot.png'
-        DEVICE_SCREENRECORD_PATH = '/sdcard/screenrecord.mp4'
+        DEVICE_SCREENSHOT_PATH = '/sdcard/screenshot.png'.freeze
+        DEVICE_SCREENRECORD_PATH = '/sdcard/screenrecord.mp4'.freeze
 
         attr_reader :width, :height, :bit_rate, :time_limit
         def initialize(**args)

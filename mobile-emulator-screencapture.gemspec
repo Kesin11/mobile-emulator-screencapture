@@ -1,5 +1,5 @@
 
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "mobile/emulator/screencapture/version"
 
@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Kenta Kase"]
   spec.email         = ["kesin1202000@gmail.com"]
 
-  spec.summary       = %q{Ruby wrapper for ios/android screen capture}
-  spec.description   = %q{Ruby wrapper for ios/android screen capture using simctl/adb screenshot/screenrecord.}
+  spec.summary       = 'Ruby wrapper for ios/android screen capture'
+  spec.description   = 'Ruby wrapper for ios/android screen capture using simctl/adb screenshot/screenrecord.'
   spec.homepage      = "https://github.com/Kesin11/mobile-emulator-screencapture"
   spec.license       = "MIT"
 
@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "mocha"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rubocop"
 end

@@ -31,7 +31,7 @@ class Mobile::Emulator::Screencapture::AndroidTest < Minitest::Test
       width: 1280,
       height: 800,
       bit_rate: 6_000_000,
-      time_limit: 180,
+      time_limit: 180
     )
 
     command = ["shell screenrecord #{android.class::DEVICE_SCREENRECORD_PATH}"]
@@ -48,7 +48,7 @@ class Mobile::Emulator::Screencapture::AndroidTest < Minitest::Test
   def test_start_screenrecord_with_no_options
     android = Mobile::Emulator::Screencapture.create(
       platform: "android",
-      screenrecord_dir: "./screenrecord",
+      screenrecord_dir: "./screenrecord"
     )
 
     command = ["shell screenrecord #{android.class::DEVICE_SCREENRECORD_PATH}"]
