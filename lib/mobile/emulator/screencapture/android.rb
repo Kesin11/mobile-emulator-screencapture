@@ -28,6 +28,31 @@ module Mobile
           screenshot_path
         end
 
+        def start_screenrecord(video_name)
+          raise "Argument video_name is nil" if video_name.nil?
+          raise "Screenrecord process already started. pid: #{@screenrecord_pid}" if @screenrecord_pid
+
+          @screenrecord_path = File.join(@screenrecord_dir, "#{video_name}.mp4")
+          @screenrecord_pid = _native_start_screenrecord
+
+          @screenrecord_path
+        end
+
+        def stop_screenrecord
+          raise 'Any screenrecord process did not started' unless @screenrecord_pid
+          screenrecord_path = @screenrecord_path
+
+          _native_stop_screenrecord
+          _pull_screenrecord(screenrecord_path)
+
+          @screenrecord_pid = nil
+          @screenrecord_path = nil
+
+          screenrecord_path
+        end
+
+        private
+
         def _adb(command)
           `adb #{command}`
         end
@@ -47,35 +72,12 @@ module Mobile
           _adb("shell rm #{DEVICE_SCREENSHOT_PATH}")
         end
 
-        def start_screenrecord(video_name)
-          raise "Argument video_name is nil" if video_name.nil?
-          raise "Screenrecord process already started. pid: #{@screenrecord_pid}" if @screenrecord_pid
-
-          @screenrecord_path = File.join(@screenrecord_dir, "#{video_name}.mp4")
-          @screenrecord_pid = _native_start_screenrecord
-
-          @screenrecord_path
-        end
-
         def _native_start_screenrecord
           command = ["shell screenrecord #{DEVICE_SCREENRECORD_PATH}"]
           command << "--size #{@width}x#{@height}" if @width && @height
           command << "--bit-rate #{@bit_rate}" if @bit_rate
           command << "--time-limit #{@time_limit}" if @time_limit
           _adb_spawn(command.join(' '))
-        end
-
-        def stop_screenrecord
-          raise 'Any screenrecord process did not started' unless @screenrecord_pid
-          screenrecord_path = @screenrecord_path
-
-          _native_stop_screenrecord
-          _pull_screenrecord(screenrecord_path)
-
-          @screenrecord_pid = nil
-          @screenrecord_path = nil
-
-          screenrecord_path
         end
 
         def _native_stop_screenrecord
